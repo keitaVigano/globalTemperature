@@ -1,9 +1,12 @@
 import matplotlib.pyplot as plt
 import seaborn as sns 
 import pandas as pd
+
 from statsmodels.graphics.tsaplots import plot_acf
 from statsmodels.graphics.tsaplots import plot_pacf
 from statsmodels.tsa.seasonal import STL
+from sktime.transformations.series.detrend import STLTransformer
+from statistics import variance
 
 def seasonal_plot(df_filtered_train):
     plt.figure(figsize=(7, 5)) 
@@ -87,3 +90,22 @@ def stl_decomposition_plot(df_filtered_train):
 
     plt.tight_layout()
     plt.show()
+
+def trend_strength(df_filtered_train):
+    transformer = STLTransformer(sp=12, return_components=True)
+    Xt = transformer.fit_transform(df_filtered_train["LandAverageTemperature"])
+    Xt['trend_residual'] = Xt['trend'] + Xt['resid']
+    var_trend_res = variance(Xt['trend_residual'])
+    var_res = variance(Xt['resid'])
+    strength_trend_index = max(0, (1 - (var_res / var_trend_res)))
+    return strength_trend_index
+
+def season_strength(df_filtered_train):
+    transformer = STLTransformer(sp=12, return_components=True)
+    Xt = transformer.fit_transform(df_filtered_train["LandAverageTemperature"])
+    from statistics import variance
+    Xt['seasonal_residual'] = Xt['seasonal'] + Xt['resid']
+    var_seasonal_res = variance(Xt['seasonal_residual'])
+    var_res = variance(Xt['resid'])
+    strength_seasonality_index = max(0, (1 - (var_res / var_seasonal_res)))
+    return strength_seasonality_index
