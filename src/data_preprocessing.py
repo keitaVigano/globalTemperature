@@ -21,3 +21,8 @@ def split_data(df, test_size=0.2):
     df_train.to_csv("../data/cleaned/GlobalTemperaturesCleanedTrain.csv", index = True, index_label = "Time")
     df_test.to_csv("../data/cleaned/GlobalTemperaturesCleanedTest.csv", index = True, index_label = "Time")
     return df_train, df_test
+
+def processed_data_fitting(df):
+    df.drop(["LandAverageTemperatureUncertainty"], axis=1, inplace=True)
+    df.index = pd.to_datetime(df.index)  
+    df.index = df.index.to_period('M') 
