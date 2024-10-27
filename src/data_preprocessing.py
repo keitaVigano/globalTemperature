@@ -22,7 +22,10 @@ def split_data(df, test_size=0.2):
     df_test.to_csv("../data/cleaned/GlobalTemperaturesCleanedTest.csv", index = True, index_label = "Time")
     return df_train, df_test
 
-def processed_data_fitting(df):
+def processed_data_fitting(df, nameFile):
     df.drop(["LandAverageTemperatureUncertainty"], axis=1, inplace=True)
     df.index = pd.to_datetime(df.index)  
-    df.index = df.index.to_period('M') 
+    df.index = df.index.to_period('M')
+    destination = "../data/processed/" + nameFile + ".csv"
+    df.to_csv(destination, index = True, index_label = "Time")
+    return df
