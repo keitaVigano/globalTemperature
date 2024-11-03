@@ -29,10 +29,6 @@ Here is the structure of this project:
   - **processed/**: Processed data ready for analysis.
   - **cleaned/**: Cleaned and sanitized data.
 
-## Installation
-
-## Usage
-
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
